@@ -2385,7 +2385,7 @@
             $$react$$default.PropTypes.string,
             $$react$$default.PropTypes.array
         ]),
-
+    
         formats : $$react$$default.PropTypes.object,
         messages: $$react$$default.PropTypes.object
     };
@@ -2402,85 +2402,85 @@
         statics: {
             filterFormatOptions: function (obj, defaults) {
                 if (!defaults) { defaults = {}; }
-
+    
                 return (this.formatOptions || []).reduce(function (opts, name) {
                     if (obj.hasOwnProperty(name)) {
                         opts[name] = obj[name];
                     } else if (defaults.hasOwnProperty(name)) {
                         opts[name] = defaults[name];
                     }
-
+    
                     return opts;
                 }, {});
             }
         },
-
+    
         propTypes        : $$mixin$$typesSpec,
         contextTypes     : $$mixin$$typesSpec,
         childContextTypes: $$mixin$$typesSpec,
-
+    
         getNumberFormat  : intl$format$cache$$default(Intl.NumberFormat),
         getDateTimeFormat: intl$format$cache$$default(Intl.DateTimeFormat),
         getMessageFormat : intl$format$cache$$default(intl$messageformat$$default),
         getRelativeFormat: intl$format$cache$$default(intl$relativeformat$$default),
-
+    
         getChildContext: function () {
             var context = this.context;
             var props   = this.props;
-
+    
             return {
                 locales:  props.locales  || context.locales,
                 formats:  props.formats  || context.formats,
                 messages: props.messages || context.messages
             };
         },
-
+    
         formatDate: function (date, options) {
             date = new Date(date);
             $$mixin$$assertIsDate(date, 'A date or timestamp must be provided to formatDate()');
             return this._format('date', date, options);
         },
-
+    
         formatTime: function (date, options) {
             date = new Date(date);
             $$mixin$$assertIsDate(date, 'A date or timestamp must be provided to formatTime()');
             return this._format('time', date, options);
         },
-
+    
         formatRelative: function (date, options, formatOptions) {
             date = new Date(date);
             $$mixin$$assertIsDate(date, 'A date or timestamp must be provided to formatRelative()');
             return this._format('relative', date, options, formatOptions);
         },
-
+    
         formatNumber: function (num, options) {
             return this._format('number', num, options);
         },
-
+    
         formatMessage: function (message, values) {
             var locales = this.props.locales || this.context.locales;
             var formats = this.props.formats || this.context.formats;
-
+    
             // When `message` is a function, assume it's an IntlMessageFormat
             // instance's `format()` method passed by reference, and call it. This
             // is possible because its `this` will be pre-bound to the instance.
             if (typeof message === 'function') {
                 return message(values);
             }
-
+    
             if (typeof message === 'string') {
                 message = this.getMessageFormat(message, locales, formats);
             }
-
+    
             return message.format(values);
         },
-
+    
         getIntlMessage: function (path) {
             var messages  = this.props.messages || this.context.messages;
             var pathParts = path.split('.');
-
+    
             var message;
-
+    
             try {
                 message = pathParts.reduce(function (obj, pathPart) {
                     return obj[pathPart];
@@ -2490,14 +2490,14 @@
                     throw new ReferenceError('Could not find Intl message: ' + path);
                 }
             }
-
+    
             return message;
         },
-
+    
         getNamedFormat: function (type, name) {
             var formats = this.props.formats || this.context.formats;
             var format  = null;
-
+    
             try {
                 format = formats[type][name];
             } finally {
@@ -2507,17 +2507,17 @@
                     );
                 }
             }
-
+    
             return format;
         },
-
+    
         _format: function (type, value, options, formatOptions) {
             var locales = this.props.locales || this.context.locales;
-
+    
             if (options && typeof options === 'string') {
                 options = this.getNamedFormat(type, options);
             }
-
+    
             switch(type) {
                 case 'date':
                 case 'time':
@@ -2535,7 +2535,7 @@
     var $$components$date$$FormattedDate = $$react$$default.createClass({
         displayName: 'FormattedDate',
         mixins     : [$$mixin$$default],
-
+    
         statics: {
             formatOptions: [
                 'localeMatcher', 'timeZone', 'hour12', 'formatMatcher', 'weekday',
@@ -2543,19 +2543,19 @@
                 'timeZoneName'
             ]
         },
-
+    
         propTypes: {
             format: $$react$$default.PropTypes.string,
             value : $$react$$default.PropTypes.any.isRequired
         },
-
+    
         render: function () {
             var props    = this.props;
             var value    = props.value;
             var format   = props.format;
             var defaults = format && this.getNamedFormat('date', format);
             var options  = $$components$date$$FormattedDate.filterFormatOptions(props, defaults);
-
+    
             return $$react$$default.DOM.span(null, this.formatDate(value, options));
         }
     });
@@ -2565,7 +2565,7 @@
     var $$components$time$$FormattedTime = $$react$$default.createClass({
         displayName: 'FormattedTime',
         mixins     : [$$mixin$$default],
-
+    
         statics: {
             formatOptions: [
                 'localeMatcher', 'timeZone', 'hour12', 'formatMatcher', 'weekday',
@@ -2573,19 +2573,19 @@
                 'timeZoneName'
             ]
         },
-
+    
         propTypes: {
             format: $$react$$default.PropTypes.string,
             value : $$react$$default.PropTypes.any.isRequired
         },
-
+    
         render: function () {
             var props    = this.props;
             var value    = props.value;
             var format   = props.format;
             var defaults = format && this.getNamedFormat('time', format);
             var options  = $$components$time$$FormattedTime.filterFormatOptions(props, defaults);
-
+    
             return $$react$$default.DOM.span(null, this.formatTime(value, options));
         }
     });
@@ -2595,30 +2595,30 @@
     var $$components$relative$$FormattedRelative = $$react$$default.createClass({
         displayName: 'FormattedRelative',
         mixins     : [$$mixin$$default],
-
+    
         statics: {
             formatOptions: [
                 'style', 'units'
             ]
         },
-
+    
         propTypes: {
             format: $$react$$default.PropTypes.string,
             value : $$react$$default.PropTypes.any.isRequired,
             now   : $$react$$default.PropTypes.any
         },
-
+    
         render: function () {
             var props    = this.props;
             var value    = props.value;
             var format   = props.format;
             var defaults = format && this.getNamedFormat('relative', format);
             var options  = $$components$relative$$FormattedRelative.filterFormatOptions(props, defaults);
-
+    
             var formattedRelativeTime = this.formatRelative(value, options, {
                 now: props.now
             });
-
+    
             return $$react$$default.DOM.span(null, formattedRelativeTime);
         }
     });
@@ -2628,7 +2628,7 @@
     var $$components$number$$FormattedNumber = $$react$$default.createClass({
         displayName: 'FormattedNumber',
         mixins     : [$$mixin$$default],
-
+    
         statics: {
             formatOptions: [
                 'localeMatcher', 'style', 'currency', 'currencyDisplay',
@@ -2637,19 +2637,19 @@
                 'maximumSignificantDigits'
             ]
         },
-
+    
         propTypes: {
             format: $$react$$default.PropTypes.string,
             value : $$react$$default.PropTypes.any.isRequired
         },
-
+    
         render: function () {
             var props    = this.props;
             var value    = props.value;
             var format   = props.format;
             var defaults = format && this.getNamedFormat('number', format);
             var options  = $$components$number$$FormattedNumber.filterFormatOptions(props, defaults);
-
+    
             return $$react$$default.DOM.span(null, this.formatNumber(value, options));
         }
     });
@@ -2659,34 +2659,34 @@
     var $$components$message$$FormattedMessage = $$react$$default.createClass({
         displayName: 'FormattedMessage',
         mixins     : [$$mixin$$default],
-
+    
         propTypes: {
             tagName: $$react$$default.PropTypes.string,
             message: $$react$$default.PropTypes.string.isRequired
         },
-
+    
         getDefaultProps: function () {
             return {tagName: 'span'};
         },
-
+    
         render: function () {
             var props   = this.props;
             var tagName = props.tagName;
             var message = props.message;
-
+    
             // Creates a token with a random guid that should not be guessable or
             // conflict with other parts of the `message` string.
             var guid       = Math.floor(Math.random() * 0x10000000000).toString(16);
             var tokenRegex = new RegExp('(@__ELEMENT-' + guid + '-\\d+__@)', 'g');
             var elements   = {};
-
+    
             var generateToken = (function () {
                 var counter = 0;
                 return function () {
                     return '@__ELEMENT-' + guid + '-' + (counter += 1) + '__@';
                 };
             }());
-
+    
             // Iterates over the `props` to keep track of any React Element values
             // so they can be represented by the `token` as a placeholder when the
             // `message` is formatted. This allows the formatted message to then be
@@ -2695,7 +2695,7 @@
             var values = Object.keys(props).reduce(function (values, name) {
                 var value = props[name];
                 var token;
-
+    
                 if ($$react$$default.isValidElement(value)) {
                     token           = generateToken();
                     values[name]    = token;
@@ -2703,14 +2703,14 @@
                 } else {
                     values[name] = value;
                 }
-
+    
                 return values;
             }, {});
-
+    
             // Formats the `message` with the `values`, including the `token`
             // placeholders for React Element values.
             var formattedMessage = this.formatMessage(message, values);
-
+    
             // Split the message into parts so the React Element values captured
             // above can be inserted back into the rendered message. This
             // approach allows messages to render with React Elements while keeping
@@ -2724,7 +2724,7 @@
                     // When the `part` is a token, get a ref to the React Element.
                     return elements[part] || part;
                 });
-
+    
             var elementArgs = [tagName, null].concat(children);
             return $$react$$default.createElement.apply(null, elementArgs);
         }
@@ -2750,21 +2750,21 @@
     var $$components$html$message$$FormattedHTMLMessage = $$react$$default.createClass({
         displayName: 'FormattedHTMLMessage',
         mixins     : [$$mixin$$default],
-
+    
         propTypes: {
             tagName: $$react$$default.PropTypes.string,
             message: $$react$$default.PropTypes.string.isRequired
         },
-
+    
         getDefaultProps: function () {
             return {tagName: 'span'};
         },
-
+    
         render: function () {
             var props   = this.props;
             var tagName = props.tagName;
             var message = props.message;
-
+    
             // Process all the props before they are used as values when formatting
             // the ICU Message string. Since the formatted message will be injected
             // via `innerHTML`, all String-based values need to be HTML-escaped. Any
@@ -2772,17 +2772,17 @@
             // markup string that is presumed to be safe.
             var values = Object.keys(props).reduce(function (values, name) {
                 var value = props[name];
-
+    
                 if (typeof value === 'string') {
                     value = $$$escape$$default(value);
                 } else if ($$react$$default.isValidElement(value)) {
                     value = $$react$$default.renderToStaticMarkup(value);
                 }
-
+    
                 values[name] = value;
                 return values;
             }, {});
-
+    
             // Since the message presumably has HTML in it, we need to set
             // `innerHTML` in order for it to be rendered and not escaped by React.
             // To be safe, all string prop values were escaped before formatting the
@@ -2815,7 +2815,7 @@
         FormattedNumber     : $$components$number$$default,
         FormattedMessage    : $$components$message$$default,
         FormattedHTMLMessage: $$components$html$message$$default,
-
+    
         __addLocaleData: $$react$intl$$__addLocaleData
     };
 
